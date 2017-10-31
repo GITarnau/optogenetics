@@ -1,58 +1,64 @@
 clear all
 close all
-fn= 'nothingwrittenyet';
+
 addpath('C:\Users\Arnaud\Documents\Fiji.app')
 addpath('C:\Users\Arnaud\Documents\Fiji.app\scripts')
 
 button = questdlg('Open Fiji?','Fiji','yes','no', 'yes');
 
- 
-if button == 'no';
+switch button
+    case 'no'
  
    errordlg('You need to open Fiji','File Error');
 
-elseif button == 'yes';
+    case 'yes'
 
 ImageJ;
 end
 ij.IJ.setTool('polyline'); 
+
+%line thickness set to 5 pixel
 ij.IJ.run('Line Width...', 'line=5');
 
-while button == 'yes'
+while string(button) == 'yes'
 
 button = questdlg('Did you draw a line','Line','yes','no', 'yes');
 
-if button == 'no';
+if string(button) == 'no';
  
     errordlg('You need to draw a line','File Error');
 
-elseif button == 'yes';
-   h = msgbox('Thank you the analysis will continue');
+elseif string(button) == 'yes';
+%    h = msgbox('Thank you the analysis will continue');
+% Fit a spline line
  ij.IJ.run('Fit Spline');
- 
+ %calls macro to get x & y coordinates
    ij.IJ.runMacroFile(java.lang.String('XY_Coordinat.ijm'));
+   %calls a macro to get the intensity values 
    ij.IJ.runMacroFile(java.lang.String('intensity_val.ijm'));
-%    ij.IJ.runMacroFile(java.lang.String('Ang.ijm'));
+% optional: this macro calculates the angle along the line 
+%ij.IJ.runMacroFile(java.lang.String('Ang.ijm'));
    
-   g_name = inputdlg('Please name your file including the ".txt" extension')
-  
+   gn = inputdlg('Please name your file including the ".txt" extension');
+  g_name=gn{1};
 
 
 ij.IJ.saveAs('Text', 'Z:\Arnaud\UW\All_Matlab_Codes\oput.txt');
   movefile('Z:\Arnaud\UW\All_Matlab_Codes\oput.txt',g_name)
-%  movefile('F:\UW\*.txt', 'F:\\UW\\curvature\\Results');
+
  ij.IJ.runMacroFile(java.lang.String('close.ijm'));
 close();
 end
 button = questdlg('Would you like to analyze more wonderful neuroblasts?','Continue analysis?','yes','no', 'yes');
 end
 
+movefile('Z:\Arnaud\UW\All_Matlab_Codes\optogenetics\*.txt', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
 ij.IJ.runMacroFile(java.lang.String('close.ijm'));
 close();
 
-h = msgbox('Thank you your part is done, let the Matlab magic happen!');
+msgbox('Thank you your part is done, let the Matlab magic happen!');
 
-
+cd 'Z:\Arnaud\UW\All_Matlab_Codes\output';
 
 D = dir('*.txt');
 l = length(D(not([D.isdir])));
@@ -63,8 +69,10 @@ for kl=1:l
 
 z=textread(D(kl).name,'%s','delimiter','\n','whitespace','');
 
+% name of the current text file without the ".txt" extension
+n_file=D(kl).name(1:end-4);
 
-% calculate the length of the log file, coordinate and intensity are equal
+% calculates the length of the log file, coordinate and intensity are equal
 % the length will be used to separate coordinates and intensity
 p=(length(z))/2;
 
@@ -72,7 +80,7 @@ p=(length(z))/2;
 for k=1:p
     z2(k)=z(k);
 end
-z3=str2num(char(z2));
+z3= str2num(char(z2));
 
 % normalised length
 uzt=(z3(:,1)/ (length(z3)-1));
@@ -86,20 +94,26 @@ for k2= p+1:length(z)
     ind=ind+1;
 end
 z5=str2num(char(z4));
-
-%
-
 z7= LineCurvature2D(z3(:,2:end));
 z6= [uzr z5 z7];
 
 
-
-
-
+%column headers
+col_header={'normalized position [0,1]','point number','X','Y','intensity values','curvature'};
 
 % dlmwrite('results.txt',[z6],'-append','delimiter',' ','roffset',5);
-dlmwrite(strcat(int2str(kl),'.txt'),[z6],'delimiter','\t','precision',6);
-xlswrite(strcat(int2str(kl),'.xls'),[z6]);
+% Writes into an excel file:
+% normalized position [0,1]
+% point number
+% x & y coordinate
+% intensity values
+% curvature
+
+
+% writes the column headers into a new excel file
+xlswrite(strcat(n_file,'.xls'),col_header,'Sheet1','A1');
+% writes the results below in the same excel file
+xlswrite(strcat(n_file,'.xls'),z6,'Sheet1','A2');
 end
 
 
