@@ -34,12 +34,12 @@ elseif button == 'yes';
    ij.IJ.runMacroFile(java.lang.String('intensity_val.ijm'));
 %    ij.IJ.runMacroFile(java.lang.String('Ang.ijm'));
    
-   g_name = inputdlg('Please name your file including the ".txt" extension')
-  
+   x = inputdlg('Please name your file including the ".txt" extension')
+   fn = input(prompt, 's');
 
 
 ij.IJ.saveAs('Text', 'Z:\Arnaud\UW\All_Matlab_Codes\oput.txt');
-  movefile('Z:\Arnaud\UW\All_Matlab_Codes\oput.txt',g_name)
+  movefile('Z:\Arnaud\UW\All_Matlab_Codes\oput.txt',fn)
 %  movefile('F:\UW\*.txt', 'F:\\UW\\curvature\\Results');
  ij.IJ.runMacroFile(java.lang.String('close.ijm'));
 close();
@@ -50,7 +50,8 @@ end
 ij.IJ.runMacroFile(java.lang.String('close.ijm'));
 close();
 
-h = msgbox('Thank you your part is done, let the Matlab magic happen!');
+display ('Thank you your part is done, let the Matlab magic happen!');
+
 
 
 
