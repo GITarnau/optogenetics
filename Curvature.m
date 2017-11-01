@@ -97,11 +97,20 @@ z5=str2num(char(z4));
 z7= LineCurvature2D(z3(:,2:end));
 z6= [uzr z5 z7];
 
+%calculates correlation between intensity and curvature 
+[r, p]=corrcoef(z6(:,5),z6(:,6));
+% output is two symmetric matrices since we only compare 2 columns, we only
+% get one value for correlation coefficient and the p value
+
+rho = r(1,2); 
+pval = p(1,2); 
+corr_res =  [rho pval];
+
 
 %column headers
-col_header={'normalized position [0,1]','point number','X','Y','intensity values','curvature'};
+col_header={'normalized position [0,1]','point number','X','Y','intensity values','curvature', 'correlation coefficient', 'correlation P-value'};
 
-% dlmwrite('results.txt',[z6],'-append','delimiter',' ','roffset',5);
+
 % Writes into an excel file:
 % normalized position [0,1]
 % point number
@@ -114,6 +123,7 @@ col_header={'normalized position [0,1]','point number','X','Y','intensity values
 xlswrite(strcat(n_file,'.xls'),col_header,'Sheet1','A1');
 % writes the results below in the same excel file
 xlswrite(strcat(n_file,'.xls'),z6,'Sheet1','A2');
+xlswrite(strcat(n_file,'.xls'),corr_res,'Sheet1','G2');
 end
 
 
