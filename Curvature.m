@@ -18,7 +18,7 @@ end
 ij.IJ.setTool('polyline'); 
 
 %line thickness set to 5 pixel
-ij.IJ.run('Line Width...', 'line=5');
+ij.IJ.run('Line Width...', 'line=3');
 
 while string(button) == 'yes'
 
@@ -30,9 +30,23 @@ if string(button) == 'no';
 
 elseif string(button) == 'yes';
 %    h = msgbox('Thank you the analysis will continue');
+
 % Fit a spline line
  ij.IJ.run('Fit Spline');
- %calls macro to get x & y coordinates
+ 
+ % Verfies the line drawing quality
+button = questdlg('Are you satisfied with your drawing?','Drawing','yes','no', 'yes');
+
+ 
+switch button
+    case 'no'
+ 
+   msgbox('Please adjust the line');
+
+    case 'yes'
+        
+        
+     %calls macro to get x & y coordinates
    ij.IJ.runMacroFile(java.lang.String('XY_Coordinat.ijm'));
    %calls a macro to get the intensity values 
    ij.IJ.runMacroFile(java.lang.String('intensity_val.ijm'));
@@ -45,14 +59,18 @@ elseif string(button) == 'yes';
 
 ij.IJ.saveAs('Text', 'Z:\Arnaud\UW\All_Matlab_Codes\oput.txt');
   movefile('Z:\Arnaud\UW\All_Matlab_Codes\oput.txt',g_name)
-
- ij.IJ.runMacroFile(java.lang.String('close.ijm'));
+  
+  %clears the console
+   ij.IJ.runMacroFile(java.lang.String('clear_log'));
 close();
 end
-button = questdlg('Would you like to analyze more wonderful neuroblasts?','Continue analysis?','yes','no', 'yes');
+button = questdlg('Would you like to analyze more wonderful neuroblasts?','Continue analysis?','yes','no', 'yes');    
 end
+ end
 
 movefile('Z:\Arnaud\UW\All_Matlab_Codes\optogenetics\*.txt', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
+
+ %closes the open windows
 ij.IJ.runMacroFile(java.lang.String('close.ijm'));
 close();
 
