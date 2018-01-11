@@ -7,7 +7,7 @@ function DiameterArea2D ()
 
 %%
 
-%optional (slows the function down) starts fiji (if Fiji is already running nothing will happen)
+% optional (slows the function down) starts fiji (if Fiji is already running nothing will happen)
 % ImageJ;
 % sets the initial diameter and area values to 0
 
