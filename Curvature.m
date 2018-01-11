@@ -13,7 +13,7 @@ switch button
         
     case 'yes'
         
-        ImageJ;
+        Miji;
 end
 
 
@@ -65,10 +65,10 @@ while string(button) == 'yes'
                 ij.IJ.runMacroFile(java.lang.String('clear_log'));
                 close();
                 
+                button = questdlg('Would you like to measure Diameter and Area?','Diameter and Area','yes','no', 'yes');
+                
                 
         end
-        button = questdlg('Would you like to measure Diameter and Area?','Diamter and Area','yes','no', 'yes');
-        
         %measure diameter and area if the user wants it
         switch button
             case 'yes'
@@ -76,13 +76,14 @@ while string(button) == 'yes'
                 % the ectopic furrow
                 DiameterArea2D
         end
-        button = questdlg('Would you like to analyze more wonderful neuroblasts?','Continue analysis?','yes','no', 'yes');
     end
+        button = questdlg('Would you like to analyze more timepoints?','Continue analysis?','yes','no', 'yes');
+    
 end
 
 % moves all the result files to the output folder
-movefile('Z:\Arnaud\UW\All_Matlab_Codes\optogenetics\*.txt', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
-movefile('Z:\Arnaud\UW\All_Matlab_Codes\optogenetics\*.xls', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
+movefile('Z:\Arnaud\UW\All_Matlab_Codes\*.txt', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
+ movefile('Z:\Arnaud\UW\All_Matlab_Codes\*.xls', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
 
 %closes Fiji
 ij.IJ.run('Quit');
