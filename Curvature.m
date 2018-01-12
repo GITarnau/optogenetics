@@ -85,11 +85,12 @@ end
 movefile('Z:\Arnaud\UW\All_Matlab_Codes\*.txt', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
  movefile('Z:\Arnaud\UW\All_Matlab_Codes\*.xls', 'Z:\Arnaud\UW\All_Matlab_Codes\output');
 
+%closes the open windows
+%ij.IJ.runMacroFile(java.lang.String('close.ijm'));
+ij.IJ.run('Close All');
+
 %closes Fiji
 ij.IJ.run('Quit');
-%closes the open windows
-% ij.IJ.runMacroFile(java.lang.String('close.ijm'));
-% close();
 
 msgbox('Thank you Temo! Your part is done, let the Matlab magic happen!');
 
@@ -97,7 +98,7 @@ cd 'Z:\Arnaud\UW\All_Matlab_Codes\output';
 
 D = dir('*.txt');
 l = length(D(not([D.isdir])));
-% fopen('results.txt','w');
+
 
 
 for kl=1:l
